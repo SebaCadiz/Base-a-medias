@@ -1,0 +1,13 @@
+
+
+    <h1>¿Estás seguro?</h1>
+    <p>Estás a punto de eliminar permanentemente la calificación:</p>
+    
+    <strong>{{ item.nombre }} ({{ item.pais.nombre }})</strong>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" style="background:red; color:white;">Sí, eliminar</button>
+        <a href="{% url 'clasificacion_lista' %}">Cancelar</a>
+    </form>
+

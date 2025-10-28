@@ -1,0 +1,92 @@
+/* --- 1. Contenedor y Título del Formulario --- */
+.contenedor-formulario {
+    max-width: 600px; /* Limita el ancho del formulario */
+    margin: 30px auto; /* Centra el formulario */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contenedor-formulario h1 {
+    color: #007bff;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+/* --- 2. Estilos para los Campos (form.as_p) --- */
+.campos-formulario p {
+    margin-bottom: 15px;
+}
+
+.campos-formulario label {
+    display: block; /* La etiqueta ocupa toda la línea */
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+.campos-formulario input, 
+.campos-formulario select, 
+.campos-formulario textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box; /* Asegura que padding no aumente el ancho total */
+    transition: border-color 0.3s;
+}
+
+.campos-formulario input:focus, 
+.campos-formulario select:focus, 
+.campos-formulario textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* --- 3. Acciones (Botones) del Formulario --- */
+.acciones-formulario {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+    display: flex; /* Para alinear el botón y el enlace */
+    gap: 15px;
+    align-items: center;
+}
+
+/* Estilo para el botón principal (Guardar) */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primario {
+    background-color: #007bff; /* Azul para la acción principal */
+    color: white;
+}
+
+.btn-primario:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para el enlace de Cancelar */
+.btn-cancelar {
+    color: #6c757d; /* Gris para la acción secundaria */
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-cancelar:hover {
+    color: #333;
+    background-color: #f8f9fa;
+}

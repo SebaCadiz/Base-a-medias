@@ -1,0 +1,32 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'Calificaciones_tributaria.css' %}">
+<div class="contenedor-formulario">
+    {% if form.instance.pk %}
+        <h1>Editar Calificación Tributaria</h1>
+    {% else %}
+        <h1>Crear Nueva Calificación Tributaria</h1>
+    {% endif %}
+
+    <form method="POST" class="formulario-estilizado">
+        {% csrf_token %} 
+        
+        <div class="campos-formulario">
+            {{ form.as_p }} 
+        </div>
+
+        <div class="acciones-formulario">
+            <button type="submit" class="btn btn-primario">
+                
+                {% if form.instance.pk %}
+                    Guardar Cambios
+                {% else %}
+                    Crear Calificación
+                {% endif %}
+            </button>
+            
+            <a href="{% url 'clasificacion_lista' %}" class="btn-cancelar">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>

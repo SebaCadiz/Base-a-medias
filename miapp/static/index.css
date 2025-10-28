@@ -1,0 +1,192 @@
+:root {
+  --accent: #0f766e;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --bg: #f8fafc;
+  --glass: rgba(255, 255, 255, 0.7);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #0f172a;
+  line-height: 1.45;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+  flex-wrap: wrap; /* Añadido para mejor responsividad */
+}
+
+.brand {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #0369a1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+}
+
+/* Mueve la nav y lo que le sigue (la sesión) a la derecha */
+nav {
+  margin-left: auto;
+}
+
+nav a {
+  margin-left: 18px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 28px;
+  align-items: center;
+  margin: 28px 0;
+}
+
+.card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+}
+
+h1 {
+  margin: 0 0 12px;
+  font-size: 28px;
+}
+
+p.lead {
+  margin: 0;
+  color: var(--muted);
+}
+
+.features {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.feature {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(15, 118, 110, 0.06), transparent);
+  border: 1px solid rgba(15, 118, 110, 0.06);
+}
+
+.tool {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+input[type="number"],
+select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #e6e9ef;
+  font-size: 15px;
+  width: 100%;
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+table th,
+table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+footer {
+  margin: 36px 0 12px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- ESTILOS PARA EL APARTADO DE SESIÓN --- */
+
+.user-session {
+  display: flex;
+  align-items: center;
+  gap: 14px; /* Mismo espaciado que tu .brand */
+  margin-left: 18px; /* Espacio para separarlo de la nav */
+}
+
+.user-session .username {
+  color: var(--muted); /* Usa tu variable de color */
+  font-weight: 600;
+  font-size: 13px; /* Coincide con tu clase .muted */
+}
+
+.btn-logout {
+  background-color: #ef4444; /* El color rojo de tu botón "Reset" */
+  color: white;
+  padding: 8px 12px; /* Un poco más pequeño para el header */
+  border-radius: 8px; /* Coincide con tus otros botones */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #dc2626; /* Rojo más oscuro */
+}

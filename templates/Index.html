@@ -1,0 +1,87 @@
+{% load static %}
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NUAM — Mantenedor de Calificaciones Tributarias</title>
+  <meta name="description" content="NUAM - Holding regional que integra las Bolsas de Santiago, Colombia y Lima. Herramienta demo para convertir montos a factores usados en procesos internos." />
+  <link rel="icon" href="data:;base64,iVBORw0KGgo="> <!-- placeholder favicon -->
+  <link rel="stylesheet" href="{% static 'index.css' %}">
+</head>
+<body>
+  <div class="container">
+<header>
+      <div class="brand">
+        <div class="logo">NUAM</div>
+        <div>
+          <strong>NUAM</strong>
+          <div class="muted">Holding regional • Bolsas de Santiago, Colombia y Lima</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#about">Acerca</a>
+        <a href="{% url 'clasificacion_lista' %}">Clasificación</a>
+        <a href="#crud">Conversor</a>
+        <a href="#contact">Contacto</a>
+      </nav>
+      <div class="user-session">
+        <span class="username">Usuario: {{ user.first_name }}</span>
+
+        <form action="{% url 'logout' %}" method="POST" style="margin: 0;">
+            {% csrf_token %}
+            <button type="submit" class="btn-logout">Cerrar Sesión</button>
+        </form>
+      </div>
+      </header>
+
+    <section class="hero">
+      <div>
+        <div class="card">
+          <h1>Mantenedor de Calificaciones Tributarias</h1>
+          <p class="lead">Proyecto tecnológico para convertir montos a factores tributarios y administrarlos en los procesos internos del mercado unificado. Incluye herramienta de conversión, CRUD de registros y vistas administrativas.</p>
+
+          <div class="features">
+            <div class="feature">
+              <strong>Integración regional</strong>
+              <div class="muted">Soporta reglas y formatos de Chile, Colombia y Perú.</div>
+            </div>
+            <div class="feature">
+              <strong>Auditable</strong>
+              <div class="muted">Registro de cambios y trazabilidad para cada conversión.</div>
+            </div>
+            <div class="feature">
+              <strong>Exportable</strong>
+              <div class="muted">Exporta tablas a CSV para procesos batch.</div>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <section id="about" style="margin-top:22px">
+      <div class="card">
+        <h3>Acerca del proyecto</h3>
+        <p class="muted">NUAM es un holding que busca un mercado más eficiente y homogéneo entre las plazas de Santiago, Colombia y Lima. Este proyecto responde a la necesidad de contar con un módulo mantenedor de calificaciones tributarias que permita:</p>
+        <ul class="muted">
+          <li>Registrar y versionar factores tributarios utilizados en procesos internos.</li>
+          <li>Convertir montos a factores según reglas locales y globales.</li>
+          <li>Auditar y exportar historial para conciliaciones.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top:22px">
+      <div class="card">
+        <h3>Contacto</h3>
+        <p class="muted">Equipo de Tecnología NUAM — <strong>tech@nuam.example</strong> (placeholder)</p>
+        <p class="muted">Repositorio: <em>Incluye .gitignore y README con instrucciones de despliegue.</em></p>
+      </div>
+    </section>
+    
+    <footer>
+      © NUAM — Proyecto demo de mantenedor de calificaciones tributarias
+    </footer>
+  </div>
+
+</body>
+</html>
