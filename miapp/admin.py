@@ -1,8 +1,14 @@
 from django.contrib import admin
-from .models import Moneda, Pais, CalificacionTributaria, TasaDeCambio
+from .models import (
+    NaturalezaContribuyente,
+    Usuario,
+    Pais,
+    Contribuyente,
+    ClasificacionTributaria
+)
 
-# Register your models here.
-admin.site.register(Moneda)
+admin.site.register(NaturalezaContribuyente)
+admin.site.register(Usuario)
 admin.site.register(Pais)
-admin.site.register(CalificacionTributaria)
-admin.site.register(TasaDeCambio)
+admin.site.register(Contribuyente)
+admin.site.register(ClasificacionTributaria)
