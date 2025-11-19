@@ -121,7 +121,23 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # redirect a crear usuario si no ha iniciado sesion
 LOGIN_URL = 'login' 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
+LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = [
+    # 🚨 RUTA A TU BACKEND PERSONALIZADO 🚨
+    'miapp.backends.UsuarioBackend', 
+    
+    # Mantener el backend de Django si aún usas 'createsuperuser' estándar:
+    'django.contrib.auth.backends.ModelBackend', 
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    # añada otros orígenes si aplica (usar https en producción)
+]
