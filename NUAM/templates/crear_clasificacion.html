@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if mode == 'crear' %}Crear Clasificación{% elif mode == 'editar' %}Editar Clasificación{% else %}Eliminar Clasificación{% endif %}
+    </title>
+    <link rel="stylesheet" href="{% static 'formulario.css' %}">
+    <!-- Page-specific styles modeled after index.css -->
+    <link rel="stylesheet" href="{% static 'crear_clasificacion.css' %}">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="nav-links">
+            {% if contribuyente %}
+                <a href="{% url 'clasificaciones_por_contribuyente' contribuyente.id_contribuyente %}" class="nav-link">Volver</a>
+            {% elif clasificacion %}
+                <a href="{% url 'clasificaciones_por_contribuyente' clasificacion.id_contribuyente.id_contribuyente %}" class="nav-link">Volver</a>
+            {% else %}
+                <a href="{% url 'manejo_tributarios' %}" class="nav-link">Volver</a>
+            {% endif %}
+        </nav>
+        <div class="user-session">
+            <span class="username">Usuario: {{ usuario.nombre }} {{ usuario.apellido }}</span>
+        </div>
+    </header>
+
+    <main class="form-container">
+        <h1 class="titulo">{% if mode == 'crear' %}Crear{% elif mode == 'editar' %}Editar{% else %}Eliminar{% endif %} Clasificación</h1>
+
+        {% if mode == 'eliminar' %}
+            <p>¿Estás seguro que quieres eliminar la clasificación #{{ clasificacion.id_clasificacion }}?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <a href="{% url 'clasificaciones_por_contribuyente' clasificacion.id_contribuyente.id_contribuyente %}" class="btn">Cancelar</a>
+            </form>
+        {% else %}
+            <form method="post">
+                {% csrf_token %}
+                <label>Tipo de tributo</label>
+                <!-- JS will populate options and keep existing value when editing -->
+                <select name="tipo_de_tributo" id="tipo_de_tributo" required>
+                        {% if clasificacion and clasificacion.tipo_de_tributo %}
+                            <!-- keep current value so JS will preserve it (works for edit and re-renders) -->
+                            <option value="{{ clasificacion.tipo_de_tributo }}" selected>{{ clasificacion.tipo_de_tributo }}</option>
+                        {% else %}
+                            <option value="" selected>Seleccione un tipo...</option>
+                        {% endif %}
+                </select>
+
+                <label>Monto</label>
+                <input name="monto" type="number" value="{{ clasificacion.monto|default:0 }}" />
+
+                <label>Código CIIU</label>
+                <input name="codigo_CIIU" type="number" value="{{ clasificacion.codigo_CIIU|default:0 }}" />
+
+                <label>Régimen</label>
+                <textarea name="regimen">{{ clasificacion.regimen|default:'' }}</textarea>
+
+                <!-- 'categoria' removed: not editable anymore per new requirement -->
+
+                <label>Fecha de creación</label>
+                <input name="fecha_de_creacion" type="date" value="{{ clasificacion.fecha_de_creacion|default:'' }}" />
+
+                <div style="margin-top: 12px;">
+                    <button type="submit" class="btn btn-primary">{% if mode == 'crear' %}Crear{% else %}Guardar cambios{% endif %}</button>
+                    <a href="{% if mode == 'crear' %}{% url 'clasificaciones_por_contribuyente' contribuyente.id_contribuyente %}{% else %}{% url 'clasificaciones_por_contribuyente' clasificacion.id_contribuyente.id_contribuyente %}{% endif %}" class="btn">Cancelar</a>
+                </div>
+            </form>
+        {% endif %}
+
+    </main>
+
+    <!-- Page-specific JS: populate tipo_de_tributo and helpers -->
+    <script src="{% static 'tipo_tributo.js' %}"></script>
+
+</body>
+</html>

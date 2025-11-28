@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Usuarios y sus Contribuyentes | Admin</title>
+    <link rel="stylesheet" href="{% static 'manejo.css' %}">
+</head>
+
+<body>
+    <header class="main-header">
+        <nav class="nav-links">
+            <a href="{% url 'manejo' %}" class="nav-link">Volver a Manejo</a>
+            <a href="{% url 'index' %}" class="nav-link">Volver al Inicio</a>
+        </nav>
+        <div class="user-session">
+            <span class="username">Admin: {{ usuario.nombre }} {{ usuario.apellido }}</span>
+        </div>
+    </header>
+
+    <main class="tabla-container">
+        <h1 class="titulo">Usuarios y sus Contribuyentes</h1>
+
+        <div class="filtros" style="margin: 16px 0; display:flex; gap:8px; align-items:center;">
+            <label for="searchMail">Buscar por correo:</label>
+            <input id="searchMail" type="search" placeholder="Ingrese mail o parte del mail" style="padding:6px; width:300px;">
+        </div>
+
+        {% for block in usuarios_contribs %}
+            <section class="usuario-block" style="margin-bottom:24px; padding:12px; background:#fff; border-radius:8px; border:1px solid #eee;">
+                
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong>#{{ block.usuario.id_usuario }}</strong> —
+                        {{ block.usuario.nombre }} {{ block.usuario.apellido }}
+                        &nbsp;(<em>{{ block.usuario.mail }}</em>)
+                    </div>
+                </div>
+
+                <div style="margin-top:12px;">
+                    {% if block.contribuyentes and block.contribuyentes|length > 0 %}
+                        <h3 style="margin:6px 0;">Contribuyentes ({{ block.contribuyentes|length }})</h3>
+                        <table style="width:100%; border-collapse:collapse; margin-top:8px;">
+                            <thead>
+                                <tr style="background:#fafafa;">
+                                    <th style="padding:8px; border-bottom:1px solid #eee; text-align:left;">ID</th>
+                                    <th style="padding:8px; border-bottom:1px solid #eee; text-align:left;">Nombre Comercial</th>
+                                    <th style="padding:8px; border-bottom:1px solid #eee; text-align:left;">Identificador</th>
+                                    <th style="padding:8px; border-bottom:1px solid #eee; text-align:left;">Situación</th>
+                                    <th style="padding:8px; border-bottom:1px solid #eee; text-align:left;">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for c in block.contribuyentes %}
+                                <tr>
+                                    <td style="padding:8px; border-bottom:1px solid #f2f2f2;">#{{ c.id_contribuyente }}</td>
+                                    <td style="padding:8px; border-bottom:1px solid #f2f2f2;">{{ c.nombre_comercial }}</td>
+                                    <td style="padding:8px; border-bottom:1px solid #f2f2f2;">{{ c.identificador_tributario }}</td>
+                                    <td style="padding:8px; border-bottom:1px solid #f2f2f2;">{{ c.situación }}</td>
+                                    <td style="padding:8px; border-bottom:1px solid #f2f2f2;">
+                                        <a href="{% url 'clasificaciones_por_contribuyente' c.id_contribuyente %}" style="margin-right:10px;">Ver clasificaciones</a>
+                                        <a href="{% url 'editar_tributario' c.id_contribuyente %}" style="margin-right:6px;">Editar</a>
+                                        <a href="{% url 'eliminar_tributario' c.id_contribuyente %}" style="color:#c0392b;">Eliminar</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p style="margin-top:8px; color:#666;">Este usuario no tiene contribuyentes registrados.</p>
+                    {% endif %}
+                </div>
+
+            </section>
+        {% endfor %}
+
+        <!-- SCRIPT DE FILTRADO -->
+        <script src="{% static 'manejo.js' %}"></script>
+
+    </main>
+</body>
+</html>
