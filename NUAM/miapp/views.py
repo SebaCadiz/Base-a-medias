@@ -61,7 +61,7 @@ def index(request):
         request.session.flush()
         return redirect('crear_usuario')
 
-    return render(request, 'index.html', {'usuario': usuario})
+    return render(request, 'Index.html', {'usuario': usuario})
 
 
 # ----------------------------
@@ -720,3 +720,4 @@ def api_currencies(request):
 
     status = 400 if "error" in result else 200
     return JsonResponse(result, status=status, safe=False)
+
