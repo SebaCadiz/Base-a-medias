@@ -1,2 +1,7 @@
 Django>=4.2
 pulsar-client==3.4.0
+requests
+docker
+pyOpenSSL
+django-extensions
+Werkzeug
