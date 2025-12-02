@@ -13,5 +13,6 @@ sudo apt install docker-compose-plugin -y
 
 mkcert localhost
 python manage.py runserver_plus --cert-file localhost.pem --key-file localhost-key.pem
+python manage.py runserver_plus --cert-file localhost+2.pem --key-file localhost+2-key.pem
 docker compose up -d
 
