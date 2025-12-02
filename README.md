@@ -16,3 +16,16 @@ python manage.py runserver_plus --cert-file localhost.pem --key-file localhost-k
 python manage.py runserver_plus --cert-file localhost+2.pem --key-file localhost+2-key.pem
 docker compose up -d
 
+editar y eliminar
+contribuyente = Contribuyente.objects.get(pk=contribuyente_id)
+
+if usuario.rol != 'administrador' and contribuyente.id_usuario != usuario:
+    messages.error(request, "No autorizado.")
+    return redirect('manejo_tributarios')
+
+clasificacion
+contribuyente = Contribuyente.objects.get(pk=contribuyente_id)
+
+if usuario.rol != 'administrador' and contribuyente.id_usuario != usuario:
+    messages.error(request, "No autorizado.")
+    return redirect('manejo_tributarios')
