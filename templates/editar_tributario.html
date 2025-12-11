@@ -1,0 +1,106 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if mode == 'editar' %}Editar{% else %}Eliminar{% endif %} Contribuyente | NUAM</title>
+    <link rel="stylesheet" href="{% static 'tributarios.css' %}">
+</head>
+<body>
+
+    <header class="main-header">
+        <nav class="nav-links">
+            <a href="{% url 'manejo_tributarios' %}" class="nav-link">Volver a Contribuyentes</a>
+        </nav>
+
+        <div class="user-session">
+            <span class="username">Usuario: {{ usuario.nombre }} {{ usuario.apellido }}</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="content-section" style="margin: 0 auto; max-width: 600px;">
+
+            {% if mode == 'editar' %}
+                <h2 class="tab-title">Editar Contribuyente #{{ contribuyente.id_contribuyente }}</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="info-box">
+                        <strong>ID Contribuyente:</strong> {{ contribuyente.id_contribuyente }}<br>
+                        <strong>País:</strong> {{ contribuyente.id_pais.pais_nom }}<br>
+                        <strong>Naturaleza:</strong> {{ contribuyente.tipo }}<br>
+                        <strong>Empleados:</strong> {{ contribuyente.empleados}}<br>
+
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                           <label for="situacion">Situación *</label>
+                            <select id="situacion" name="situacion" required>
+                                <option value="">Selecciona la situación</option>
+                                {% for situacion in situacion_choices %}
+                                <option value="{{ situacion }}">{{ situacion }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre_comercial">Nombre Comercial *</label>
+                            <input type="text" id="nombre_comercial" name="nombre_comercial" value="{{ contribuyente.nombre_comercial }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="actividad_economica">Actividad Económica *</label>
+                            <input type="text" id="actividad_economica" name="actividad_economica" value="{{ contribuyente.actividad_economica }}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="identificador_tributario">Identificador Tributario *</label>
+                        <input type="text" id="identificador_tributario" name="identificador_tributario" value="{{ contribuyente.identificador_tributario }}" required>
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        <a href="{% url 'manejo_tributarios' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+
+            {% elif mode == 'eliminar' %}
+                <h2 class="tab-title">Eliminar Contribuyente #{{ contribuyente.id_contribuyente }}</h2>
+                
+                <div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+                    <strong style="color: #856404;">⚠️ Advertencia:</strong>
+                    <p style="color: #856404; margin-top: 10px;">
+                        Estás a punto de eliminar permanentemente este contribuyente. Esta acción no se puede deshacer.
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <strong>ID Contribuyente:</strong> {{ contribuyente.id_contribuyente }}<br>
+                    <strong>País:</strong> {{ contribuyente.id_pais.pais_nom }}<br>
+                    <strong>Naturaleza:</strong> {{ contribuyente.naturaleza_del_contribuyente.tipo }}<br>
+                    <strong>Situación:</strong> {{ contribuyente.situación }}<br>
+                    <strong>Nombre Comercial:</strong> {{ contribuyente.nombre_comercial }}<br>
+                    <strong>Actividad Económica:</strong> {{ contribuyente.actividad_economica }}<br>
+                    <strong>Identificador Tributario:</strong> {{ contribuyente.identificador_tributario }}
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+                        <a href="{% url 'manejo_tributarios' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <footer class="footer"></footer>
+
+</body>
+</html>

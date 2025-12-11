@@ -1,0 +1,147 @@
+MANUAL DE USUARIO - PLATAFORMA NUAM
+===================================
+
+1. INTRODUCCIÓN
+---------------
+Bienvenido a la plataforma de gestión NUAM. Este sistema centraliza la administración de información tributaria y de contribuyentes en el marco de la integración bursátil de Chile, Colombia y Perú.
+
+Alcance del sistema:
+- Gestión de Usuarios: Administración de perfiles, roles y seguridad.
+- Gestión de Contribuyentes: Registro detallado de entidades legales y naturales con validaciones por país.
+- Clasificaciones Tributarias: Asociación de impuestos, tasas y regímenes fiscales a cada contribuyente.
+- Herramientas Financieras: Conversor de divisas en tiempo real.
+- Auditoría: Registro cronológico de eventos del sistema (Logs).
+
+
+2. ACCESO Y REGISTRO
+--------------------
+
+2.1. Iniciar Sesión
+Para acceder a las funcionalidades de la plataforma:
+1. Diríjase a la página de inicio.
+2. Haga clic en "Iniciar Sesión" en la barra de navegación o en el botón central.
+3. Ingrese su Correo Electrónico y Contraseña.
+4. Haga clic en el botón "Ingresar".
+   Nota: Si ingresa credenciales incorrectas, el sistema mostrará una alerta roja.
+
+2.2. Registro de Usuario (Crear Cuenta)
+Si no posee una cuenta:
+1. Seleccione la opción "Registrar" en la pantalla de ingreso.
+2. Complete el formulario con:
+   - Nombre y Apellido.
+   - Correo Electrónico: Debe tener formato válido (ej: usuario@gmail.com).
+   - Contraseña: Mínimo 6 caracteres.
+   - Rol: Seleccione entre "Cliente" (Usuario estándar) o "Administrador".
+3. Al finalizar, el sistema creará su cuenta y podrá iniciar sesión inmediatamente.
+
+
+3. GESTIÓN DE MI CUENTA (PERFIL)
+--------------------------------
+Cualquier usuario logueado puede gestionar su propia información personal.
+
+3.1. Configuración de Datos
+1. En el menú superior, si es Cliente, haga clic en "Manejar Mi Cuenta". Si es Administrador, esta opción también está disponible.
+2. Puede actualizar:
+   - Nombre y Apellido.
+   - Correo Electrónico.
+
+3.2. Seguridad y Contraseña
+En la misma sección de configuración:
+1. Ubique el apartado "Seguridad".
+2. Ingrese su nueva contraseña y confírmela en el campo siguiente.
+3. Haga clic en "Guardar Cambios".
+
+3.3. Eliminar Cuenta
+Si desea darse de baja del sistema:
+1. Al final de la página de configuración, encontrará el botón rojo "Eliminar mi cuenta".
+2. El sistema solicitará una confirmación final.
+3. Advertencia: Esta acción es irreversible y borrará todos sus datos asociados.
+
+
+4. GESTIÓN DE CONTRIBUYENTES
+----------------------------
+Esta es la función principal para usuarios con rol de Cliente y Administrador.
+
+4.1. Panel de Mis Contribuyentes
+1. Vaya a la sección "Tributarios" o "Mis Contribuyentes".
+2. Verá una tabla con todos los contribuyentes registrados bajo su usuario, mostrando: ID, País, Naturaleza, Situación e Identificador.
+
+4.2. Crear Nuevo Contribuyente
+1. Haga clic en la pestaña o botón "Crear Contribuyente".
+2. Complete los campos obligatorios (*):
+   - País: Seleccione Chile, Colombia o Perú. Esto ajustará las validaciones automáticas.
+   - Naturaleza:
+     * Persona Natural: El campo de empleados se establece en 0 automáticamente.
+     * Persona Jurídica: Debe especificar la cantidad de empleados.
+   - Identificador Tributario: El sistema validará el formato según el país:
+     * Chile (RUT): Formato XX.XXX.XXX-K.
+     * Colombia (NIT): Formato XXXXXXXXX-Y.
+     * Perú (RUC): Debe contener 11 dígitos numéricos.
+   - Datos Comerciales: Nombre, Actividad Económica, Categoría y Situación (Activo/Inactivo).
+3. Haga clic en "Crear Contribuyente".
+
+4.3. Editar y Eliminar
+- Editar: Haga clic en el botón azul "Editar" en la tabla para modificar datos.
+- Eliminar: Haga clic en el botón rojo "Eliminar" para borrar el registro permanentemente.
+
+
+5. CLASIFICACIONES TRIBUTARIAS
+------------------------------
+Permite asignar detalles fiscales específicos a cada Contribuyente creado.
+
+5.1. Ver Clasificaciones
+1. Desde la tabla de "Mis Contribuyentes", haga clic en el botón verde "Clasificaciones" (o "Ver clasificaciones") en la fila del contribuyente deseado.
+2. Verá el historial de impuestos, tasas y regímenes asociados a esa empresa/persona.
+
+5.2. Crear Clasificación
+1. Dentro de la vista de clasificaciones de un contribuyente, pulse "+ Crear Nueva Clasificación".
+2. Llene el formulario:
+   - Tipo de Tributo: Impuesto, Tasa, Contribución, u Otro.
+   - Monto: Valor numérico del impuesto.
+   - Código CIIU: Código de actividad económica. Importante: El sistema valida que este código tenga exactamente 4 o 6 dígitos.
+   - Régimen: Descripción del régimen (ej: Pro Pyme, Renta Presunta).
+   - Fecha: Fecha de creación del registro.
+
+
+6. PERFIL: ADMINISTRADOR
+------------------------
+Funciones exclusivas para usuarios con rol de "Administrador".
+
+6.1. Gestión Global de Usuarios
+1. Acceda al menú "Manejo" o "Manejo Usuario".
+2. Visualizará una lista de todos los usuarios registrados en la plataforma.
+3. Filtros: Puede buscar usuarios por correo electrónico o filtrar por rol (Cliente/Administrador).
+4. Acciones:
+   - Editar: Puede cambiar el nombre, correo y promover o degradar el Rol de otros usuarios.
+   - Eliminar: Puede borrar usuarios del sistema.
+   - Ver Contribuyentes: Acceso directo para ver qué empresas ha registrado cada usuario.
+
+6.2. Registro de Eventos (Auditoría)
+El sistema cuenta con un módulo de auditoría basado en Apache Pulsar para trazar actividades críticas.
+1. Haga clic en el botón "Eventos" en el menú superior.
+2. Verá una bitácora cronológica con:
+   - Tipo de Evento: USUARIO_CREADO, CLASIFICACION_CREADA, EDITAR_USUARIO, etc.
+   - Contenido: Detalles JSON de la acción realizada.
+   - Fecha y Hora: Timestamp exacto del suceso.
+3. Filtros: Use el selector para filtrar eventos por categoría (Usuario, Contribuyente, Clasificación).
+
+
+7. HERRAMIENTAS ADICIONALES
+---------------------------
+
+7.1. Conversor de Divisas
+Herramienta integrada con API externa para cálculo de tipos de cambio.
+1. Vaya a la sección "Divisas".
+2. Seleccione moneda de origen (ej: USD) y destino (ej: CLP, PEN, COP).
+3. Ingrese el monto y haga clic en "Convertir".
+4. El sistema mostrará el resultado calculado con la tasa actual del mercado.
+
+7.2. Preguntas Frecuentes (FAQ)
+Sección informativa con detalles sobre la normativa tributaria de los tres países (SII, DIAN, SUNAT) y el uso de la plataforma.
+
+
+8. SOLUCIÓN DE PROBLEMAS FRECUENTES
+-----------------------------------
+- Error "Código CIIU inválido": Asegúrese de ingresar solo números y que la longitud sea exactamente de 4 o 6 dígitos.
+- No veo el menú "Manejo": Confirme que su usuario tiene asignado el rol de "Administrador". Si se registró como "Cliente" por error, solicite a un administrador que actualice su rol.
+- Divisas no cargan: Esta función requiere conexión a internet activa para consultar la API de tipos de cambio.
