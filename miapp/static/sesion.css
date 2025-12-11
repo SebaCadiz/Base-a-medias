@@ -1,0 +1,361 @@
+/* Variables para colores */
+    :root {
+        --primary-orange: #ff6600;    /* Naranja principal */
+        --light-gray-bg: #f0f0f0;     /* Fondo general de la página */
+        --text-color: #333;           /* Color de texto general */
+        --border-color: #ccc;         /* Color de borde de inputs */
+        --button-bg-inactive: #f0f0f0; /* Fondo de botones de país/secundario inactivos */
+        --button-text-inactive: #666;   /* Texto de botones inactivos */
+    }
+
+    /* --- ESTILOS GLOBALES Y LAYOUT --- */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--light-gray-bg);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* HEADER (Asumiendo que lleva el logo) */
+    header {
+        background-color: white;
+        height: 120px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+
+        /* ruta absoluta al static folder (si tu STATIC_URL es '/static/') */
+        background-image: url('/static/img/Nuam.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 200px auto; 
+    }
+
+    /* FOOTER (La franja naranja inferior) */
+    .footer {
+        background-color: var(--primary-orange);
+        height: 100px;
+        width: 100%;
+        margin-top: auto; /* Empuja el footer hacia la parte inferior */
+        background-image: url('img/Banner.png'); 
+        background-color: var(--primary-orange); 
+        background-size: cover; /* O 'contain' o '100% 100%' */
+        background-position: bottom center;
+    }
+
+    /* --- CONTENIDO PRINCIPAL Y FORMULARIO DE LOGIN --- */
+    .main-content {
+        background-color: white;
+        width: 100%;
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 40px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+        color: var(--text-color);
+        flex-grow: 1;
+    }
+
+    .main-content h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .main-content p {
+        margin-bottom: 30px;
+        font-size: 0.95em;
+        color: #555;
+    }
+
+    /* SELECCIÓN DE PAÍS */
+    .country-selection {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+    .country-button {
+        background-color: var(--button-bg-inactive);
+        color: var(--button-text-inactive);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .country-button.active {
+        background-color: var(--primary-orange);
+        color: white;
+        border-color: var(--primary-orange);
+    }
+
+    /* FORMULARIO DE LOGIN */
+    .login-form {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .login-form label {
+        font-size: 0.9em;
+        font-weight: bold;
+        color: #444;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        font-size: 1em;
+        box-sizing: border-box;
+    }
+
+    .login-form .forgot-password {
+        text-align: right;
+        font-size: 0.9em;
+        color: var(--primary-orange);
+        text-decoration: none;
+        margin-top: -5px;
+        margin-bottom: 10px;
+    }
+
+    /* BOTONES DE ACCIÓN (Sign in, Register) */
+    .form-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn.primary {
+        background-color: var(--primary-orange);
+        color: white;
+    }
+
+    .btn.primary:hover {
+        background-color: #e65c00; 
+    }
+
+    .btn.secondary {
+        background-color: var(--button-bg-inactive);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn.secondary:hover {
+        background-color: #ddd;
+    }
+
+    /* --- ESTILOS DE LA VENTANA MODAL DE REGISTRO --- */
+
+    /* 1. Fondo Oscuro (Overlay) */
+    .modal {
+        /* ESTA PROPIEDAD LO OCULTA INICIALMENTE. JS lo cambia a 'flex' */
+        display: none; 
+        
+        position: fixed; 
+        z-index: 100; 
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        
+        background-color: rgba(0, 0, 0, 0.6); 
+        
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* 2. Contenido de la ventana (El formulario visible) */
+    .modal-content {
+        background-color: #fefefe;
+        padding: 30px;
+        border: 1px solid #888;
+        width: 90%; 
+        max-width: 450px; 
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        position: relative; 
+    }
+
+    .modal-content h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 25px;
+    }
+
+    /* Estilos para el formulario dentro del modal */
+    .registration-form {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .registration-form label {
+        display: block;
+        margin-top: 10px;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    .registration-form input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    /* 3. Botón de Cerrar (la "X") */
+    .close-button {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .close-button:hover,
+    .close-button:focus {
+        color: var(--primary-orange);
+        text-decoration: none;
+    }
+
+    /* Estilo específico para el botón de registro dentro del modal */
+    .registration-form .btn.primary {
+        align-self: center; 
+        width: 70%;
+    }
+    /* --- ANIMACIÓN LATERAL DE LOGOS DESPLAZÁNDOSE --- */
+    .left-scroll-container {
+        position: fixed;
+        top: 120px; /* alineado con tu header */
+        left: 0;
+        width: 120px;
+        height: calc(100vh - 220px);
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 50;
+    }
+
+    .left-scroll-track {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        will-change: transform;
+        animation: scrollUp 18s linear infinite;
+    }
+
+    .left-scroll-track img {
+        width: 100%;
+        display: block;
+        flex: 0 0 auto;
+        margin: 0;
+    }
+
+    @keyframes scrollUp {
+        0%   { transform: translateY(0); }
+        100% { transform: translateY(-50%); }
+    }
+
+
+    /* --- NUEVOS ESTILOS DROPDOWN PARA ROL --- */
+
+    .dropdown-rol {
+        position: relative; /* Esencial para que el contenido desplegable se posicione correctamente */
+        display: inline-block;
+        width: 100%; /* Ocupa el ancho completo del formulario */
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    /* El botón principal que dice "Rol" */
+    .rol-main-button {
+        /* Toma un estilo similar a los botones de acción */
+        background-color: var(--button-bg-inactive);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* El contenedor del menú que se despliega */
+    .dropdown-content {
+        /* 🌟 PROPIEDAD CLAVE: OCULTO POR DEFECTO 🌟 */
+        display: none; 
+        
+        position: absolute;
+        background-color: white;
+        min-width: 100%;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 10;
+        border: 1px solid var(--border-color);
+        border-radius: 5px;
+        margin-top: 5px;
+    }
+
+    /* Estilos para cada opción (Administrador/Cliente) */
+    .rol-option {
+        text-align: left;
+        padding: 10px;
+        cursor: pointer;
+        transition: background-color 0.1s;
+    }
+
+    .rol-option:hover {
+        background-color: var(--light-gray-bg);
+    }
+
+    .rol-option label {
+        display: inline-block;
+        padding-left: 10px;
+        cursor: pointer;
+        font-weight: normal; /* Asegura que el texto no esté en negrita por el label principal */
+        font-size: 1em;
+    }
+
+    /* Estilos para ocultar el radio button nativo y estilizarlo si lo deseas */
+    .rol-option input[type="radio"] {
+        display: none;
+    }
+
+    /* Mostrar el radio button como seleccionado (opcional, para visualización) */
+    .rol-option input[type="radio"]:checked + label {
+        color: var(--primary-orange);
+        font-weight: bold;
+    }
