@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if mode == 'crear' %}Crear Clasificación{% elif mode == 'editar' %}Editar Clasificación{% else %}Eliminar Clasificación{% endif %}
+    </title>
+    <link rel="stylesheet" href="{% static 'tributarios.css' %}">
+</head>
+<body>
+
+    <header class="main-header">
+        <nav class="nav-links">
+            {% if contribuyente %}
+                <a href="{% url 'clasificaciones_por_contribuyente' contribuyente.id_contribuyente %}" class="nav-link">Volver</a>
+            {% elif clasificacion %}
+                <a href="{% url 'clasificaciones_por_contribuyente' clasificacion.id_contribuyente.id_contribuyente %}" class="nav-link">Volver</a>
+            {% else %}
+                <a href="{% url 'manejo_tributarios' %}" class="nav-link">Volver</a>
+            {% endif %}
+        </nav>
+        <div class="user-session">
+            <span class="username">Usuario: {{ usuario.nombre }} {{ usuario.apellido }}</span>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="content-section" style="margin: 0 auto; max-width: 700px;">
+            
+            <h2 class="tab-title">
+                {% if mode == 'crear' %}Crear Clasificación{% elif mode == 'editar' %}Editar Clasificación{% else %}Eliminar Clasificación{% endif %}
+            </h2>
+
+            {% if mode == 'eliminar' %}
+                <div class="info-box" style="background-color: #fff3cd; border-color: #ffc107;">
+                    <strong style="color: #856404;">⚠️ Advertencia:</strong>
+                    <p style="color: #856404; margin-top: 5px;">
+                        ¿Estás seguro que quieres eliminar la clasificación <strong>#{{ clasificacion.id_clasificacion }}</strong>? Esta acción no se puede deshacer.
+                    </p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+                        <a href="{% url 'clasificaciones_por_contribuyente' clasificacion.id_contribuyente.id_contribuyente %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="tipo_de_tributo">Tipo de tributo *</label>
+                        <select name="tipo_de_tributo" id="tipo_de_tributo" required>
+                            {% if clasificacion and clasificacion.tipo_de_tributo %}
+                                <option value="{{ clasificacion.tipo_de_tributo }}" selected>{{ clasificacion.tipo_de_tributo }}</option>
+                            {% else %}
+                                <option value="" selected>Seleccione un tipo...</option>
+                            {% endif %}
+                        </select>
+                        <div id="tipo-helper"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="monto">Monto</label>
+                            <input name="monto" id="monto" type="number" value="{{ clasificacion.monto|default:0 }}" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="codigo_CIIU">Código CIIU (4 o 6 dígitos)</label>
+                            <input name="codigo_CIIU" id="codigo_CIIU" type="number" value="{{ clasificacion.codigo_CIIU|default:0 }}" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regimen">Régimen</label>
+                        <textarea name="regimen" id="regimen" placeholder="Ej: Pro Pyme, Renta Presunta">{{ clasificacion.regimen|default:'' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha_de_creacion">Fecha de creación</label>
+                        <input name="fecha_de_creacion" id="fecha_de_creacion" type="date" value="{{ clasificacion.fecha_de_creacion|default:'' }}" />
+                    </div>
+
+                    <div class="btn-group">
+                        <button type="submit" class="btn btn-primary">
+                            {% if mode == 'crear' %}Crear Clasificación{% else %}Guardar Cambios{% endif %}
+                        </button>
+                        
+                        <a href="{% if mode == 'crear' %}{% url 'clasificaciones_por_contribuyente' contribuyente.id_contribuyente %}{% else %}{% url 'clasificaciones_por_contribuyente' clasificacion.id_contribuyente.id_contribuyente %}{% endif %}" class="btn btn-secondary">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer class="footer"></footer>
+
+    <script src="{% static 'tipo_tributo.js' %}"></script>
+
+</body>
+</html>

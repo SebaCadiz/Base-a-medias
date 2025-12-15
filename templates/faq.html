@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preguntas Frecuentes | NUAM</title>
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+    <link rel="stylesheet" href="{% static 'divisa.css' %}">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="nav-links">
+            <a href="{% url 'index' %}" class="nav-link">← Volver al Inicio</a>
+        </nav>
+        <div class="user-session">
+            <span class="session-text">Sesión:</span>
+            <span class="username">{{ usuario.nombre }} {{ usuario.apellido }}</span>
+            <form action="{% url 'logout' %}" method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="btn-logout">CERRAR</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 class="main-title">Preguntas Frecuentes</h1>
+        <section class="converter-section">
+            <div class="converter-box">
+                {% include 'includes/preguntas.html' %}
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-logo">
+            <img src="{% static 'img/Nuam.png' %}" alt="Logo Nuam" class="nuam-logo">
+        </div>
+    </footer>
+
+    <script>
+        // FAQ accordion on faq page
+        document.querySelectorAll(".faq-question-panel").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const answer = btn.nextElementSibling;
+                document.querySelectorAll(".faq-answer-panel").forEach(a => {
+                    if (a !== answer) a.style.display = "none";
+                });
+                answer.style.display = (answer.style.display === "block") ? "none" : "block";
+            });
+        });
+    </script>
+</body>
+</html>
