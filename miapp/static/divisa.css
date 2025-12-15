@@ -1,0 +1,320 @@
+/* Styles for the currency converter and FAQ, matching NUAM orange/white theme */
+:root{
+    --nuam-orange: #F75A22;
+    --nuam-dark: #333333;
+    --nuam-white: #ffffff;
+    --nuam-muted: #666666;
+    --nuam-radius: 8px;
+}
+
+/* Estilos para la nueva sección del Dashboard */
+.dashboard-section {
+    padding: 20px 0;
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+}
+
+.chart-container-grid {
+    display: grid;
+    /* 2 columnas en pantallas grandes */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.chart-box {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chart-box h3 {
+    margin-top: 0;
+    color: #007bff; /* Color primario */
+    font-size: 1.1em;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+}
+/* Estilos necesarios para Chart.js */
+
+.chart-container-grid {
+    display: grid;
+    /* 2 columnas en pantallas grandes */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.chart-box {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* CLAVE 1: Define una altura máxima para la caja del gráfico */
+    height: 400px; 
+    /* CLAVE 2: Hace que la caja use Flexbox para que el canvas se estire a la altura disponible */
+    display: flex; 
+    flex-direction: column;
+}
+
+.chart-box h3 {
+    flex-shrink: 0; /* Asegura que el título no se encoja */
+}
+
+/* El canvas debe crecer para usar el espacio restante dentro de la caja de altura fija */
+.chart-box canvas {
+    flex-grow: 1; 
+    max-height: 100%; /* Ayuda a que no exceda el límite del padre */
+}
+
+/* Adaptación para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+    .chart-container-grid {
+        grid-template-columns: 1fr; 
+    }
+    .chart-box {
+        /* Puedes reducir la altura en móviles si lo deseas */
+        height: 350px; 
+    }
+}
+
+/* Adaptación para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+    .chart-container-grid {
+        /* 1 columna en móviles */
+        grid-template-columns: 1fr; 
+    }
+}
+/* ---------- Converter ---------- */
+.converter{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: stretch;
+}
+
+.converter label{
+    font-weight: 600;
+    color: var(--nuam-dark);
+    font-size: 0.95rem;
+    text-align: left;
+}
+
+.converter select,
+.converter input[type="number"]{
+    padding: 8px 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: var(--nuam-white);
+    color: var(--nuam-dark);
+    cursor: pointer;
+}
+
+#from, #to, #amount{
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #e6e6e6;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: var(--nuam-white);
+    color: var(--nuam-dark);
+}
+
+.converter button{
+    background: var(--nuam-orange);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.converter button:hover{
+    background: #d84515;
+}
+
+#loading{
+    color: var(--nuam-muted);
+    font-size: 0.95rem;
+}
+
+#result{
+    font-weight:700;
+    margin-top: 6px;
+    color: var(--nuam-dark);
+}
+
+#rate{
+    font-size: 0.9rem;
+    color: var(--nuam-muted);
+}
+
+.converter-section{
+    margin: 40px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.converter-box{
+    background: var(--nuam-white);
+    padding: 30px;
+    border-radius: var(--nuam-radius);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    width: 100%;
+    max-width: 560px;
+}
+
+.converter-box h2{
+    color: var(--nuam-orange);
+    margin-bottom: 20px;
+    font-size: 1.3rem;
+}
+
+/* ---------- General FAQ ---------- */
+.faq-panel-include, .faq-container{
+    background: var(--nuam-white);
+    padding: 20px;
+    border-radius: calc(var(--nuam-radius) - 2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+    margin: 20px 0;
+}
+
+.faq-title{
+    color: var(--nuam-dark);
+    font-size: 1.4rem;
+    margin-bottom: 12px;
+    font-weight:700;
+}
+
+.faq-country{
+    color: var(--nuam-orange);
+    margin-top: 14px;
+    margin-bottom:8px;
+    font-weight:700;
+}
+
+.faq-item-panel, .faq-item{
+    margin-bottom: 12px;
+}
+
+.faq-question-panel, .faq-question{
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px;
+    font-weight: 700;
+    background: #ffffff;
+    border: 1px solid #ececec;
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--nuam-dark);
+    transition: all 0.18s ease;
+}
+
+.faq-question-panel:hover, .faq-question:hover{
+    border-color: var(--nuam-orange);
+    transform: translateY(-2px);
+}
+
+.faq-answer-panel, .faq-answer{
+    display: none;
+    padding: 12px 14px;
+    border-left: 4px solid var(--nuam-orange);
+    background: #fbfbfb;
+    margin-top: 8px;
+    border-radius: 6px;
+    color: var(--nuam-muted);
+    line-height: 1.5;
+}
+
+/* Inline FAQ */
+.card-faq{
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.card-faq:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.faq-inline{
+    max-height: 360px;
+    overflow-y:auto;
+    padding: 8px 0;
+}
+
+/* ---------- FAQ Panel ---------- */
+.faq-panel{
+    display:none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1200;
+}
+
+.faq-panel.active{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+}
+
+.faq-panel-header{
+    background: var(--nuam-orange);
+    color: #fff;
+    padding: 18px 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    width:100%;
+    max-width:900px;
+    border-top-left-radius:6px;
+    border-top-right-radius:6px;
+}
+
+.faq-panel-header h2{
+    margin:0;
+    font-size:1.25rem;
+}
+
+.faq-close-btn{
+    background:none;
+    border:none;
+    color:white;
+    font-size:1.3rem;
+    cursor:pointer;
+    padding:6px;
+}
+
+.faq-panel-content{
+    background: var(--nuam-white);
+    width:100%;
+    max-width:900px;
+    margin-top:12px;
+    padding:22px;
+    border-radius:6px;
+    max-height: calc(100vh - 100px);
+    overflow:auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+.faq-question-panel{
+    padding:12px 14px;
+    font-size:1rem;
+}
+
+.faq-answer-panel{
+    padding:12px 14px;
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 900px){
+    .converter-box{ padding: 20px; }
+    .faq-panel-content{ padding: 16px; margin: 10px; max-width: calc(100% - 20px); }
+    .faq-inline{ max-height: 260px; }
+}
