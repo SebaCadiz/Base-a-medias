@@ -73,3 +73,8 @@ echo "--------------------------------------------------------"
 # 6. Reiniciar
 sudo apache2ctl configtest && sudo systemctl restart apache2
 echo "--- Proceso finalizado. Prueba entrar a https://localhost ---"
+
+
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = ['https://localhost']
