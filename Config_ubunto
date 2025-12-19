@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# 1. RUTAS DE TUS CERTIFICADOS MKCERT
+# Cambia estas rutas por la ubicación real de tus archivos .pem
+CERT_FILE="/home/frontend1/Escritorio/Base-a-medias-main/localhost+1.pem"
+KEY_FILE="/home/frontend1/Escritorio/Base-a-medias-main/localhost+1-key.pem"
+
+# 2. RUTA DEL PROYECTO
+PROYECTO_PATH="/home/frontend1/Escritorio/Base-a-medias-main"
+# Nombre de la carpeta interna donde está el archivo wsgi.py
+NOMBRE_APP="tu_nombre_de_proyecto" 
+
+echo "--- Configurando Apache con mkcert en Ubuntu ---"
+
+# 3. Crear el archivo de Virtual Host
+sudo bash -c "cat << EOF > /etc/apache2/sites-available/django_ssl.conf
+<VirtualHost *:443>
+    ServerName localhost
+
+    SSLEngine on
+    SSLCertificateFile $CERT_FILE
+    SSLCertificateKeyFile $KEY_FILE
+
+    # Configuración de WSGI para Django
+    WSGIDaemonProcess django_app python-home=$PROYECTO_PATH/env python-path=$PROYECTO_PATH
+    WSGIProcessGroup django_app
+    WSGIScriptAlias / $PROYECTO_PATH/$NOMBRE_APP/wsgi.py
+
+    # Archivos estáticos
+    Alias /static $PROYECTO_PATH/static
+    <Directory $PROYECTO_PATH/static>
+        Require all granted
+    </Directory>
+
+    # Permisos para el archivo WSGI
+    <Directory $PROYECTO_PATH/$NOMBRE_APP>
+        <Files wsgi.py>
+            Require all granted
+        </Files>
+    </Directory>
+
+    ErrorLog \${APACHE_LOG_DIR}/django_error.log
+    CustomLog \${APACHE_LOG_DIR}/django_access.log combined
+</VirtualHost>
+EOF"
+
+# 4. Habilitar SSL y el sitio
+sudo a2enmod ssl
+sudo a2ensite django_ssl.conf
+sudo a2dissite 000-default.conf
+
+# 5. Permisos de carpeta (Crítico en Ubuntu)
+# Apache (usuario www-data) necesita permiso para entrar en tu carpeta personal
+chmod +x /home/frontend1
+chmod +x /home/frontend1/Escritorio
+
+# 6. Reiniciar
+echo "Verificando sintaxis..."
+if sudo apache2ctl configtest; then
+    sudo systemctl restart apache2
+    echo "[ÉXITO] Servidor funcionando en https://localhost"
+else
+    echo "[ERROR] Revisa los logs de error."
+fi
