@@ -1,0 +1,72 @@
+/* crear_clasificacion.css
+   Styles inspired by index.css but focused on the classification form
+*/
+
+:root{
+    --color-primary-orange: #F75A22;
+    --color-secondary-green: #28A745;
+    --color-dark-text: #333;
+    --color-light-bg: #fff;
+}
+
+body{
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    margin:0;
+    background: linear-gradient(180deg, #f8fafc 0%, #f3f6f8 100%);
+    color: var(--color-dark-text);
+}
+
+.main-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 30px;
+    background: var(--color-light-bg);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.nav-links a{ color: var(--color-dark-text); font-weight:600; text-decoration:none; margin-right:18px; }
+.nav-links a:hover{ color:var(--color-primary-orange); }
+
+.form-container{
+    max-width:760px;
+    margin: 36px auto;
+    background: white;
+    border-radius:10px;
+    box-shadow: 0 8px 30px rgba(30,40,50,0.06);
+    padding: 28px;
+}
+
+.form-container .titulo{ text-align:center; font-size:1.6rem; margin-bottom:18px; color:var(--color-primary-orange); }
+
+form label{ display:block; margin-top:12px; color:#333; font-weight:600; font-size:0.9rem; }
+form input[type="text"], form input[type="number"], form input[type="date"], form textarea, form select{
+    width:100%;
+    padding:10px 12px;
+    margin-top:6px;
+    border-radius:6px;
+    border:1px solid rgba(0,0,0,0.12);
+    font-size:0.95rem;
+    background: #fbfcfd;
+}
+
+form textarea{ min-height:90px; resize:vertical; }
+
+.btn{ display:inline-block; padding:10px 16px; border-radius:6px; color:#fff; background:var(--color-primary-orange); text-decoration:none; font-weight:700; margin-right:8px; }
+.btn.btn-primary{ background: var(--color-secondary-green); }
+.btn.btn-danger{ background: #d9534f; }
+
+.small-note{ font-size:0.9rem; color:#777; margin-top:10px }
+
+@media(max-width:700px){
+    .form-container{ margin:18px; padding:18px; }
+}
+
+/* helpers */
+.row{ display:flex; gap:12px; }
+.row .col{ flex:1; }
+
+/* extra subtle focus */
+input:focus, textarea:focus, select:focus{ outline: 2px solid rgba(243,90,34,0.12); border-color: rgba(243,90,34,0.18); }
+
+/* End crear_clasificacion.css */

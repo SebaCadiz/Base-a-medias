@@ -1,0 +1,165 @@
+/* --- 1. CONFIGURACIÓN BASE (Copiado de manejo.css) --- */
+:root {
+    --primary-orange: #ff6600;
+    --light-bg: #f7f7f7;
+    --border-color: #ddd;
+    --text-color: #333;
+}
+
+.filtros-container {
+    background-color: #fafafa;
+    padding: 15px;
+
+    border-radius: 6px;
+    border: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end; /* Alinea a la derecha */
+    align-items: center;
+}
+
+.filtros-container select {
+    cursor: pointer;
+    background-color: white;
+    align-items: left;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: sans-serif; /* Aseguramos misma fuente */
+}
+
+.user-session {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9em;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--light-bg);
+}
+
+/* --- 2. HEADER Y FOOTER (Idénticos) --- */
+.main-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px 20px 20px;
+    background: white;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sutil sombra extra */
+}
+
+.main-header::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    background: var(--primary-orange);
+}
+
+.nav-links { flex: 1 1 auto; display: flex; justify-content: center; gap: 20px; }
+.nav-link { color: var(--primary-orange); text-decoration: none; font-weight: bold; }
+.user-session { flex: 0 0 auto; }
+.user-session .username { font-weight: 600; color: var(--text-color); }
+
+.footer {
+    background-color: var(--primary-orange);
+    height: 100px;
+    width: 100%;
+    margin-top: auto;
+    background-image: url('/static/img/Banner.png');
+    background-size: cover; 
+    background-position: bottom center;
+}
+
+/* --- 3. CONTENEDOR PRINCIPAL --- */
+.container-central {
+    flex: 1 0 auto;
+    margin: 50px auto;
+    width: 80%; /* Mismo ancho que manejo.html */
+    max-width: 900px;
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.titulo {
+    text-align: center;
+    color: var(--text-color);
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* --- 4. ESTILOS DE LA LISTA DE EVENTOS --- */
+.lista-eventos {
+    list-style: none; /* Quitar puntos */
+    padding: 0;
+    margin: 0;
+}
+
+.evento-item {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.evento-item:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px); /* Efecto de elevación sutil */
+}
+
+.evento-header {
+    background-color: #f2f2f2; /* Mismo gris que los TH de la tabla */
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px 6px 0 0;
+}
+
+.tipo-evento {
+    font-weight: bold;
+    color: var(--primary-orange);
+    text-transform: uppercase;
+}
+
+.fecha-evento {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.evento-body {
+    padding: 15px;
+}
+
+/* Estilo para el <pre> para que no se desborde */
+.evento-body pre {
+    margin: 0;
+    white-space: pre-wrap;       /* Ajusta texto largo */
+    word-wrap: break-word;       /* Rompe palabras largas */
+    font-family: monospace;
+    background-color: #fafafa;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #eee;
+    color: #444;
+}
+
+.evento-vacio {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+    font-style: italic;
+}

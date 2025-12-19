@@ -1,0 +1,135 @@
+:root {
+    --color-primary-orange: #F75A22;
+    --color-secondary-green: #28A745;
+    --color-dark-text: #333;
+    --color-light-bg: #fff;
+    --bg-color: #f8f8f8;
+}
+
+/* Fondo y Tipografía Base */
+body {
+    background-color: var(--bg-color);
+    font-family: Arial, sans-serif;
+    color: var(--color-dark-text);
+}
+
+/* Títulos */
+h2 {
+    color: var(--color-dark-text);
+    font-weight: 300; /* Coincide con .main-title del index */
+    font-size: 2.2em;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+h5.card-title {
+    color: var(--color-primary-orange);
+    font-weight: bold;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+h6.text-secondary {
+    color: var(--color-primary-orange) !important; /* Sobrescribe bootstrap */
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    margin-top: 20px;
+}
+
+/* Tarjetas (Cards) - Estilo Unificado */
+.card {
+    background-color: var(--color-light-bg);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombra suave como en index */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 30px;
+}
+
+/* Formularios */
+.form-label {
+    color: var(--color-dark-text);
+    font-weight: bold;
+}
+
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    border-color: var(--color-primary-orange);
+    box-shadow: 0 0 0 0.2rem rgba(247, 90, 34, 0.25); /* Glow naranja */
+}
+
+/* Botones Personalizados */
+/* Reemplazo visual para .btn-primary */
+.btn-primary {
+    background-color: var(--color-primary-orange);
+    border-color: var(--color-primary-orange);
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+    background-color: #d84515; /* Un tono más oscuro del naranja */
+    border-color: #d84515;
+    transform: translateY(-1px);
+}
+
+/* Botón "Volver" */
+.btn-outline-secondary {
+    color: #666;
+    border-color: #ccc;
+    background: transparent !important; /* Forzamos transparencia para quitar el azul del inline style actual */
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-outline-secondary:hover {
+    color: var(--color-primary-orange);
+    border-color: var(--color-primary-orange);
+    background-color: #fff !important;
+}
+
+/* Listas de Requerimientos */
+.list-group-item {
+    border: none;
+    padding-left: 0;
+    background-color: transparent;
+    font-size: 0.95em;
+}
+
+/* Textos de Color Específicos */
+.text-danger {
+    color: #dc3545 !important; /* Mantiene rojo bootstrap para errores/obligatorios */
+}
+
+.text-success {
+    color: var(--color-secondary-green) !important; /* Usa el verde del index */
+}
+
+/* Alertas */
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    color: #856404;
+    border-left: 5px solid var(--color-primary-orange); /* Toque de marca */
+}
