@@ -1,58 +1,75 @@
 #!/bin/bash
 
-# --- VARIABLES (Ajustadas a tus fotos) ---
+# --- VARIABLES (Ajustadas a tus rutas) ---
 R_PATH="/home/frontend1/Escritorio/Base-a-medias-main"
-APP_NAME="NUAM" 
+APP_NAME="NUAM"
 CERT="$R_PATH/localhost+2.crt"
 KEY="$R_PATH/localhost+2.key"
-# Buscamos el módulo compilado automáticamente
-WSGI_MOD=$(find $R_PATH/env -name "mod_wsgi-py*.so" | head -n 1)
 
-echo "--- Iniciando Configuración ---"
+echo "--- Iniciando Configuración en Modo PROXY (Tipo Windows) ---"
 
-# 1. Instalar dependencias para compilar mod_wsgi
-sudo apt update && sudo apt install -y apache2-dev python3-dev
+# 1. Instalar dependencias necesarias
+sudo apt update && sudo apt install -y apache2
 
-# 2. Intentar instalar mod_wsgi de nuevo (ahora funcionará)
-source $R_PATH/env/bin/activate
-pip install mod_wsgi
+# 2. Activar módulos de Apache para Proxy y SSL
+# Esto permite que Apache redireccione el tráfico al puerto 8000
+sudo a2enmod ssl proxy proxy_http rewrite headers
 
-# 3. Configurar Apache
-sudo a2enmod ssl rewrite
-echo "LoadModule wsgi_module $WSGI_MOD" | sudo tee /etc/apache2/mods-available/wsgi_custom.load
-sudo a2enmod wsgi_custom
-
-# 4. Crear el VirtualHost
+# 3. Crear el VirtualHost en modo Proxy
+# Nota: Quitamos mod_wsgi para usar la terminal de Django directamente
 sudo bash -c "cat << EOF > /etc/apache2/sites-available/django_ssl.conf
 <VirtualHost *:443>
     ServerName localhost
+
     SSLEngine on
     SSLCertificateFile $CERT
     SSLCertificateKeyFile $KEY
 
-    WSGIDaemonProcess django_app python-home=$R_PATH/env python-path=$R_PATH
-    WSGIProcessGroup django_app
-    WSGIScriptAlias / $R_PATH/$APP_NAME/wsgi.py
+    # Configuración de Proxy idéntica a tu Windows
+    ProxyPreserveHost On
+    ProxyRequests Off
+    RequestHeader set X-Forwarded-Proto \"https\"
 
+    # Servir archivos estáticos directamente desde Apache
     Alias /static $R_PATH/staticfiles
     <Directory $R_PATH/staticfiles>
         Require all granted
     </Directory>
 
-    <Directory $R_PATH/$APP_NAME>
-        <Files wsgi.py>
-            Require all granted
-        </Files>
-    </Directory>
+    # No pasar los estáticos al proxy, que los maneje Apache
+    ProxyPass /static/ !
+
+    # Enviar todo lo demás al servidor de desarrollo (Terminal)
+    ProxyPass / http://127.0.0.1:8000/
+    ProxyPassReverse / http://127.0.0.1:8000/
+
+    ErrorLog \${APACHE_LOG_DIR}/django_error.log
+    CustomLog \${APACHE_LOG_DIR}/django_access.log combined
 </VirtualHost>
 EOF"
 
-# 5. Activar y dar permisos de paso a Apache
+# 4. Activar sitio y desactivar el default
 sudo a2ensite django_ssl.conf
 sudo a2dissite 000-default.conf
+
+# 5. Permisos de paso para Apache
 chmod +x /home/frontend1
 chmod +x /home/frontend1/Escritorio
 
+# 6. Reiniciar Apache
+echo "--- Verificando configuración y reiniciando Apache ---"
+sudo apache2ctl configtest && sudo systemctl restart apache2
+
+echo "--------------------------------------------------------"
+echo "PROCESO FINALIZADO CON ÉXITO"
+echo "--------------------------------------------------------"
+echo "PARA VER LOS GET/POST, DEBES HACER LO SIGUIENTE:"
+echo "1. Abre una terminal nueva."
+echo "2. Ejecuta: cd $R_PATH"
+echo "3. Ejecuta: source env/bin/activate"
+echo "4. Ejecuta: python manage.py runserver"
+echo "5. Entra a https://localhost en tu navegador."
+echo "--------------------------------------------------------"
 # 6. Reiniciar
 sudo apache2ctl configtest && sudo systemctl restart apache2
 echo "--- Proceso finalizado. Prueba entrar a https://localhost ---"
