@@ -23,14 +23,10 @@ DEFAULT_FROM = os.getenv("DEFAULT_NOTIFICATION_EMAIL")
 def send_email(data: dict):
     msg = EmailMessage()
     msg["From"] = DEFAULT_FROM
-
-    # aceptar lista o string en "to"
+    
+    # Manejo de destinatarios
     to_field = data.get("to")
-    if isinstance(to_field, (list, tuple)):
-        msg["To"] = ", ".join(map(str, to_field))
-    else:
-        msg["To"] = str(to_field)
-
+    msg["To"] = ", ".join(map(str, to_field)) if isinstance(to_field, (list, tuple)) else str(to_field)
     msg["Subject"] = data.get("subject", "")
 
     if data.get("html"):
@@ -38,13 +34,20 @@ def send_email(data: dict):
     else:
         msg.set_content(data.get("body", ""))
 
-    server = smtplib.SMTP(SMTP_HOST, SMTP_PORT)
-    server.starttls()
-    server.login(SMTP_USER, SMTP_PASS)
-    server.send_message(msg)
-    server.quit()
-
-    logger.info("Email enviado a %s", msg["To"])
+    # --- MEJORA DE ESTABILIDAD ---
+    try:
+        # Añadimos un timeout para evitar que el worker se quede colgado
+        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=30) as server:
+            server.set_debuglevel(1)  # Activa esto para ver el diálogo exacto en la terminal
+            server.ehlo()            # Identificación inicial obligatoria
+            server.starttls()        # Cifrado
+            server.ehlo()            # Re-identificación tras cifrado
+            server.login(SMTP_USER, SMTP_PASS)
+            server.send_message(msg)
+            logger.info("Email enviado exitosamente a %s", msg["To"])
+    except smtplib.SMTPException as e:
+        logger.error("Error específico de SMTP: %s", e)
+        raise
 
 def _parse_message_bytes(raw_bytes):
     # intenta varias formas de parsing para aceptar distintos formatos
@@ -149,3 +152,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
