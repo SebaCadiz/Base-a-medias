@@ -2,7 +2,7 @@
 
 # --- VARIABLES (Ajustadas a tus rutas) ---
 R_PATH="/home/frontend1/Escritorio/Base-a-medias-main"
-APP_NAME="NUAM"
+APP_NAME="NUAM" 
 CERT="$R_PATH/localhost+2.crt"
 KEY="$R_PATH/localhost+2.key"
 
@@ -12,11 +12,11 @@ echo "--- Iniciando Configuración en Modo PROXY (Tipo Windows) ---"
 sudo apt update && sudo apt install -y apache2
 
 # 2. Activar módulos de Apache para Proxy y SSL
-# Esto permite que Apache redireccione el tráfico al puerto 8000
+# Necesitamos proxy_http para redirigir el tráfico y ssl para el certificado
 sudo a2enmod ssl proxy proxy_http rewrite headers
 
 # 3. Crear el VirtualHost en modo Proxy
-# Nota: Quitamos mod_wsgi para usar la terminal de Django directamente
+# Esta configuración permite que Apache reciba HTTPS y hable con Django
 sudo bash -c "cat << EOF > /etc/apache2/sites-available/django_ssl.conf
 <VirtualHost *:443>
     ServerName localhost
@@ -25,12 +25,19 @@ sudo bash -c "cat << EOF > /etc/apache2/sites-available/django_ssl.conf
     SSLCertificateFile $CERT
     SSLCertificateKeyFile $KEY
 
+    # Soporte para que Apache pueda hablar con un Django que también tiene SSL
+    SSLProxyEngine On
+    SSLProxyVerify none 
+    SSLProxyCheckPeerCN off
+    SSLProxyCheckPeerName off
+    SSLProxyCheckPeerExpire off
+
     # Configuración de Proxy idéntica a tu Windows
     ProxyPreserveHost On
     ProxyRequests Off
     RequestHeader set X-Forwarded-Proto \"https\"
 
-    # Servir archivos estáticos directamente desde Apache
+    # Servir archivos estáticos directamente desde Apache para mayor velocidad
     Alias /static $R_PATH/staticfiles
     <Directory $R_PATH/staticfiles>
         Require all granted
@@ -40,19 +47,20 @@ sudo bash -c "cat << EOF > /etc/apache2/sites-available/django_ssl.conf
     ProxyPass /static/ !
 
     # Enviar todo lo demás al servidor de desarrollo (Terminal)
-    ProxyPass / http://127.0.0.1:8000/
-    ProxyPassReverse / http://127.0.0.1:8000/
+    # Si usas runserver normal, cambia https por http abajo
+    ProxyPass / https://127.0.0.1:8000/
+    ProxyPassReverse / https://127.0.0.1:8000/
 
     ErrorLog \${APACHE_LOG_DIR}/django_error.log
     CustomLog \${APACHE_LOG_DIR}/django_access.log combined
 </VirtualHost>
 EOF"
 
-# 4. Activar sitio y desactivar el default
+# 4. Activar sitio y desactivar el default para evitar conflictos
 sudo a2ensite django_ssl.conf
 sudo a2dissite 000-default.conf
 
-# 5. Permisos de paso para Apache
+# 5. Permisos de paso para Apache (necesario para acceder a /static)
 chmod +x /home/frontend1
 chmod +x /home/frontend1/Escritorio
 
@@ -61,20 +69,13 @@ echo "--- Verificando configuración y reiniciando Apache ---"
 sudo apache2ctl configtest && sudo systemctl restart apache2
 
 echo "--------------------------------------------------------"
-echo "PROCESO FINALIZADO CON ÉXITO"
+echo "PROCESO FINALIZADO"
 echo "--------------------------------------------------------"
-echo "PARA VER LOS GET/POST, DEBES HACER LO SIGUIENTE:"
-echo "1. Abre una terminal nueva."
-echo "2. Ejecuta: cd $R_PATH"
-echo "3. Ejecuta: source env/bin/activate"
-echo "4. Ejecuta: python manage.py runserver"
-echo "5. Entra a https://localhost en tu navegador."
+echo "PASOS PARA VER TU LOGIN Y LOS GET/POST:"
+echo "1. Ve a tu terminal de Django."
+echo "2. Ejecuta: python manage.py runserver_plus --cert-file localhost+2.pem"
+echo "3. Entra en el navegador a: https://localhost"
 echo "--------------------------------------------------------"
-# 6. Reiniciar
-sudo apache2ctl configtest && sudo systemctl restart apache2
-echo "--- Proceso finalizado. Prueba entrar a https://localhost ---"
-
-
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CSRF_TRUSTED_ORIGINS = ['https://localhost']
