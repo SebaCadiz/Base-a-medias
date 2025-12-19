@@ -68,18 +68,17 @@ chmod +x /home/frontend1/Escritorio
 echo "--- Verificando configuración y reiniciando Apache ---"
 sudo apache2ctl configtest && sudo systemctl restart apache2
 
+sudo chown frontend1:frontend1 /home/frontend1/Escritorio/Base-a-medias-main/db.sqlite3
+sudo chmod 664 /home/frontend1/Escritorio/Base-a-medias-main/db.sqlite3
+
+
 echo "--------------------------------------------------------"
 echo "PROCESO FINALIZADO"
 echo "--------------------------------------------------------"
-echo "PASOS PARA VER TU LOGIN Y LOS GET/POST:"
-echo "1. Ve a tu terminal de Django."
-echo "2. Ejecuta: python manage.py runserver_plus --cert-file localhost+2.pem"
-echo "3. Entra en el navegador a: https://localhost"
+echo "Entra en el navegador a: https://localhost"
 echo "--------------------------------------------------------"
 
 
 
-sudo chown frontend1:frontend1 /home/frontend1/Escritorio/Base-a-medias-main/db.sqlite3
-sudo chmod 664 /home/frontend1/Escritorio/Base-a-medias-main/db.sqlite3
 
 
