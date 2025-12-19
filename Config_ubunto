@@ -77,11 +77,6 @@ echo "2. Ejecuta: python manage.py runserver_plus --cert-file localhost+2.pem"
 echo "3. Entra en el navegador a: https://localhost"
 echo "--------------------------------------------------------"
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CSRF_TRUSTED_ORIGINS = ['https://localhost']
-SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_SAVE_EVERY_REQUEST = True
-CSRF_TRUSTED_ORIGINS = ['https://localhost']
 
 
 sudo chown frontend1:frontend1 /home/frontend1/Escritorio/Base-a-medias-main/db.sqlite3
