@@ -284,21 +284,13 @@ abrir el woker.py
 DATOS PARA .env
 DEBUG=fALSE
 
-
-SECRET_KEY=tu_clave_secreta_django_muy_larga
-# Genera esta clave en python con: from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())
-ENCRYPT_KEY=AQUI_PEGAS_LA_CLAVE_GENERADA_DE_FERNET
-
-# En tu archivo .env
-SECRET_KEY=k^72*19d8!m@_9#q2$p5%n8&... (pon letras, números y símbolos aleatorios, al menos 50 caracteres)
-
 # Email
 PULSAR_URL=pulsar://localhost:6650
 EMAIL_TOPIC=persistent://public/default/email
 SMTP_HOST=smtp.sendgrid.net
 SMTP_PORT=587
 SMTP_USER=apikey
-SMTP_PASS=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
+SMTP_PASS=Esta en el word
 DEFAULT_NOTIFICATION_EMAIL=pruebas.nuam@gmail.com
 
 
