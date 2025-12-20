@@ -208,11 +208,9 @@ sudo ./Configurar_Ubunto.sh
 ```
 
 ✔ Este script instala:
-
 * Docker
 * Docker Compose
 * Apache
-* mkcert
 * Dependencias del sistema
 
 🔴 **REINICIAR EL SISTEMA DESPUÉS DE EJECUTAR EL SCRIPT**
