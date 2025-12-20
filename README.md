@@ -118,10 +118,10 @@ DEFAULT_NOTIFICATION_EMAIL=pruebas.nuam@gmail.com
 ## 📊 Excel de Prueba para Carga Masiva
 
 El proyecto utiliza un **archivo Excel de prueba** para cargas masivas de datos.
+Se adjunto un archivo de prueba para el trabajo
 
 * El archivo debe estar en formato `.xlsx`
 * Se utiliza junto a `openpyxl` y `pandas`
-* Se recomienda mantenerlo fuera del repositorio o en `/media/test/`
 
 ---
 
