@@ -9,6 +9,8 @@ KEY="$R_PATH/localhost+2.key"
 echo "--- Iniciando Configuración en Modo PROXY (Tipo Windows) ---"
 
 # 1. Instalar dependencias necesarias
+sudo apt update
+sudo apt install -y apache2-dev python3-dev
 sudo apt update && sudo apt install -y apache2
 
 # 2. Activar módulos de Apache para Proxy y SSL
