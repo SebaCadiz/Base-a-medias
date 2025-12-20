@@ -336,7 +336,9 @@ localhost+2-key.pem
 
 
 para asegurar el sistema ejecutar denuevo en la base del proyecto en otra terminal un
+```
 sudo ./Configurar_Ubunto.sh
+```
 para reiniciar el apache
 
 ## 🌐 Accesos
