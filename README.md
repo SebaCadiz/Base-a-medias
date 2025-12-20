@@ -208,12 +208,17 @@ sudo ./Configurar_Ubunto.sh
 ```
 
 ✔ Este script instala:
-* Docker
-* Docker Compose
 * Apache
 * Dependencias del sistema
 
-🔴 **REINICIAR EL SISTEMA DESPUÉS DE EJECUTAR EL SCRIPT**
+PARA DOCKER
+sudo apt install docker.io docker-compose -y 
+sudo systemctl enable docker 
+sudo systemctl start docker 
+sudo usermod -aG docker $USER
+
+
+🔴 **REINICIAR EL SISTEMA DESPUÉS DE EJECUTAR EL DE DOCKER**
 
 ---
 
@@ -243,13 +248,13 @@ mkcert -install
 Desde la **raíz del proyecto**:
 
 ```bash
-mkcert localhost 127.0.0.1
+mkcert localhost 
 ```
 
 Genera archivos como:
 
-* localhost+2.pem
-* localhost+2-key.pem
+* localhost+.pem
+* localhost+key.pem
 
 ⚠️ **NO BORRAR ESTOS ARCHIVOS**
 
@@ -324,8 +329,15 @@ Salida esperada:
 ```
 Running on https://127.0.0.1:8000
 ```
-
+ademas la creacion de los archivos
+localhost+2.pem 
+localhost+2-key.pem
 ---
+
+
+para asegurar el sistema ejecutar denuevo en la base del proyecto en otra terminal un
+sudo ./Configurar_Ubunto.sh
+para reiniciar el apache
 
 ## 🌐 Accesos
 
