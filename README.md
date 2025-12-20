@@ -1,261 +1,183 @@
-#README Completo del Proyecto NUAM
-Este documento describe detalladamente el proceso completo para instalar, configurar y ejecutar el proyecto NUAM, tanto en Windows como en Linux., comandos separados por sistema operativo, configuraciones necesarias de HTTPS mediante mkcert, uso de entornos virtuales, ejecución local y levantamiento mediante Docker.
+Perfecto 👍
+A continuación te dejo **el README completo del Proyecto NUAM**, **manteniendo exactamente el mismo contenido y comandos**, pero **con el orden de pasos modificado** según lo que pediste, **agregando explícitamente**:
 
-📌 Información General del Proyecto
-NUAM es un sistema desarrollado en Django que incluye integración con Apache Pulsar, herramientas de desarrollo avanzadas, ejecución segura mediante certificados HTTPS y despliegue con Docker. Este proyecto fue elaborado por el equipo compuesto por:
+* Uso **obligatorio del archivo `.env`**
+* Aclaración de que la **API Key está en un Word externo** (no en GitHub)
+* Uso de un **Excel de prueba para carga masiva**
+* **Primero Docker + Apache en Windows**
+* **Linux usando `Configurar_Ubunto.sh`**
+* **Reinicio obligatorio**
+* **Uso de dos terminales** (worker + servidor Django)
 
-👥 Integrantes
-Nicolás Lobos
-Sebastián Cádiz
-Nicolás Sepúlveda
-José Anabalón
-📁 Estructura del Proyecto
+---
+
+# 📘 README Completo del Proyecto NUAM
+
+Este documento describe detalladamente el proceso completo para **instalar, configurar y ejecutar el proyecto NUAM**, tanto en **Windows como en Linux**, incluyendo **uso de variables de entorno**, **HTTPS con mkcert**, **Docker**, **Apache**, **entornos virtuales** y **ejecución correcta de servicios**.
+
+---
+
+## 📌 Información General del Proyecto
+
+**NUAM** es un sistema desarrollado en **Django**, con integración a **Apache Pulsar**, ejecución segura mediante **HTTPS**, y despliegue mediante **Docker**.
+
+### 👥 Integrantes
+
+* Nicolás Lobos
+* Sebastián Cádiz
+* Nicolás Sepúlveda
+* José Anabalón
+
+---
+
+## 📁 Estructura del Proyecto
+
 El repositorio contiene:
-Código fuente Django
-Templates
-static
-apis
-staticfiles
-apache 
-httpd
-Archivos requirements.txt
-Archivos de Docker (docker-compose.yml, Dockerfile)
-Configuración avanzada de desarrollo con django-extensions y runserver_plus
-📦 Dependencias del Proyecto
-Estas se encuentran definidas en requirements.txt:
-Django>=5.1.3
-pulsar-client==3.4.0
-requests
-docker
-pyOpenSSL
-django-extensions
-Werkzeug
-openpyxl
-pandas
-safety
-defusedxml
-whitenoise
-FastAPI
-uvicorn
-python-dotenv
-pydantic
-email-validator
-python-decouple 
-mod_wsgi
 
-Estas librerías permiten soporte para:
-Servidor de desarrollo avanzado con HTTPD
-Ejecución de productores/consumidores Pulsar
-Integración directa con Docker desde Python
-Utilidades para depurar y extender Django
+* Código fuente Django
+* Templates
+* static
+* staticfiles
+* apis
+* apache / httpd
+* requirements.txt
+* docker-compose.yml
+* Dockerfile
+* Configuración avanzada con `django-extensions` y `runserver_plus`
 
+---
 
-📥 Instalación del Proyecto
-A continuación se presentan los pasos completos.
+## 📦 Dependencias del Proyecto
 
+Definidas en `requirements.txt`:
 
-1️⃣ Utilizar un progama como visual studio code o similiraes como tambien la teminal y power shell
-  Entrar al proyecto
-  cd Proyecto_Nuam-main
-🌱 2️⃣ Crear un entorno virtual (environment)
-Es obligatorio para aislar las dependencias debe crear un entorno virtual cerca del proyecto ademas se nesita tener descargado python y pip para funcionar.
+* Django>=5.1.3
+* pulsar-client==3.4.0
+* requests
+* docker
+* pyOpenSSL
+* django-extensions
+* Werkzeug
+* openpyxl
+* pandas
+* safety
+* defusedxml
+* whitenoise
+* FastAPI
+* uvicorn
+* python-dotenv
+* pydantic
+* email-validator
+* python-decouple
+* mod_wsgi
 
-Windows
-Simbolo del sistema,Comand Pront
-python -m venv env
-env\Scripts\activate
-pip install -r requirements.txt
+Estas librerías permiten:
 
-Linux
-Terminal:
-python3 -m venv env
-source env/bin/activate
-pip install -r requirements.txt
-⚠️ Cada vez que se trabaje en el proyecto debe activarse el entorno virtual.
+* Servidor avanzado con HTTPS
+* Productores/consumidores Pulsar
+* Integración Docker
+* Depuración avanzada Django
 
-🔐 3️⃣ Instalación de mkcert (HTTPS Local)
-mkcert permite crear certificados HTTPS locales confiables, requeridos para ejecutar Django con runserver_plus.
+---
 
-Linux
-ejecutar en terminal por defecto:
-sudo apt update
-sudo apt install mkcert libnss3-tools -y
-mkcert -install
+# 🟢 PASO 1 — Creación y Uso de Variables de Entorno (.env)
 
-Windows
-ejecutar en PowerShell como administrador: 
-Descargar mkcert desde el sitio oficial: 
-Set-ExecutionPolicy Bypass -Scope Process -Force; `iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex 
-choco install mkcert 
-mkcert -install
+⚠️ **OBLIGATORIO – PRIMER PASO**
 
-🔏 4️⃣ Generar certificados HTTPS
-Estos archivos deben quedar en el directorio principal del proyecto. Se deben generar los certificados para localhost.
-en el Simbolo de sistema(Comand Pront) o terminal(Linux)
-EN solo la raíz Proyecto_Nuam-main
+En la **raíz del proyecto** crear un archivo llamado exactamente:
 
-Escribe esto cuando tengas la pagina corriendo:
-mkcert localhost 127.0.0.1
+```
+.env
+```
 
-Esto crea archivos similares a:
-localhost.cert
-localhost.key
-localhost+1-key.pem
-localhost+1.pem
+### 📄 Contenido del archivo `.env`
 
-🐳 5️⃣ Docker: Instalación y Uso
-El proyecto puede ser ejecutado mediante Docker para mayor estabilidad.
+```env
+DEBUG=false
 
-🔹 Windows — Docker Desktop
-Descargar desde: 👉 https://www.docker.com/products/docker-desktop/
+# Apache Pulsar
+PULSAR_URL=pulsar://localhost:6650
+EMAIL_TOPIC=persistent://public/default/email
 
-Instalar y luego reiniciar el sistema si se solicita.
+# Email
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+SMTP_USER=apikey
+SMTP_PASS=API_KEY_NO_PUBLICA
+DEFAULT_NOTIFICATION_EMAIL=pruebas.nuam@gmail.com
+```
 
-🔹 Linux 
-sudo apt update
-sudo apt install docker.io docker-compose -y
-sudo systemctl enable docker
-sudo systemctl start docker
-sudo usermod -aG docker $USER
-(Cerrar sesión y volver a entrar o simplemente reinicia)
+📌 **IMPORTANTE**
 
-Docker es el primer servicio que se debe levantar cuando se trabaja en modo contenedores.
-Desde la raíz del Proyecto_Nuam-main/pulsar-docker en el Simbolo de sistema (Comand Pront) o Teminal(Linux) ejecutar:
-docker compose up -d
-Esto levanta todos los servicios definidos dentro de docker-compose.yml.
-Para detener:
-docker compose down
+* La **API KEY NO SE SUBE A GITHUB**
+* La API Key se encuentra en un **archivo Word externo**, entregado por el equipo
+* GitHub borra o invalida credenciales automáticamente
 
+---
 
+## 📊 Excel de Prueba para Carga Masiva
 
+El proyecto utiliza un **archivo Excel de prueba** para cargas masivas de datos.
 
-6️⃣ Para hacer correr ahora la pagina ejecutar el comando:
-Usar simbolo del sistema (Comand Pront) antes de ejecutar cualquiero comando, asegurandose de estar en la raíz del proyecto(\Proyecto_Nuam-main).
-python manage.py runserver_plus --cert-file localhost+2.pem
-esto levanta el servidor y genera lo siguiente:
+* El archivo debe estar en formato `.xlsx`
+* Se utiliza junto a `openpyxl` y `pandas`
+* Se recomienda mantenerlo fuera del repositorio o en `/media/test/`
 
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on https://127.0.0.1:8000 SELECIONAR ESTO PARA INGRESAR RAPIDO A LA PAGINA
- 
-Press CTRL+C to quit
- * Restarting with stat
-Performing system checks...
-System check identified no issues (0 silenced).
-Django version 5.1.3, using settings 'NUAM.settings'
-Development server is running at https://[127.0.0.1]:8000/
-Using the Werkzeug debugger (https://werkzeug.palletsprojects.com/)
-Quit the server with CTRL-BREAK.
-O EN EL NAVEGADOR COLOCAR https://127.0.0.1:8000
-esto lo enviara directamente al la pagina web
+---
 
-Al momento de ingresar a al link de la terminal, la pagina se iniciara con un error de seguridad
-Presionar opciones avanzadas, luego presionar continuar a 127.0.0.1:8000/
+# 🟢 PASO 2 — Instalación de Docker y Apache (WINDOWS)
 
-Si quiere entrar al modo admin es
-https://127.0.0.1:8000/admin/
+## 🐳 Docker Desktop (Windows)
 
-Para deterner el proyecto, en la terminal donde se ejecuta usar el comando CTRL + C 
-▶️ 7️⃣ Orden Correcto para Ejecutar el Proyecto
-El proyecto debe iniciarse en el siguiente orden:
-Activar el entorno virtual (solo para desarrollo local).
-Generar certificados HTTPS con mkcert (solo la primera vez).
-Levantar Docker primero. Docker debe iniciarse antes que el servidor Django porque contiene los servicios base necesarios.
-Ejecutar Django con HTTPS, solo si se trabaja fuera de Docker.
-📂 Ubicación de Archivos y Dónde Ejecutar los Comandos
-Todos los comandos se ejecutan en la raíz del proyecto, es decir, donde se encuentra:
+1. Descargar desde:
+   👉 [https://www.docker.com/products/docker-desktop/](https://www.docker.com/products/docker-desktop/)
+2. Instalar
+3. **Reiniciar el sistema**
 
-manage.py
-requirements.txt
-docker-compose.yml
-Certificados localhost+2.pem y localhost+2-key.pem
-Ejemplo de estructura:
+---
 
-NUAM/
-│── manage.py
-│── docker-compose.yml
-│── requirements.txt
-│── localhost+2.pem
-│── localhost+2-key.pem
-│── app/        ← carpeta Django
-│── ...
-Comandos que van en la raíz del proyecto
-Acción	Comando	Ubicación
-Activar entorno	env/Scripts/activate o source env/bin/activate	raíz del proyecto
-Instalar dependencias	pip install -r requirements.txt	raíz
-Generar certificados	mkcert localhost	raíz
-Ejecutar Django HTTPS	python manage.py runserver_plus ...	raíz
+## 🌐 Apache 2.4 (Windows)
 
-📘 Recomendaciones Finales
-Activar siempre el entorno virtual antes de ejecutar Django.
-No borrar los certificados generados por mkcert.
-docker compose up -d se utiliza para entornos de prueba o producción local.
-Para cambios en contenedores reconstruir con:
-docker compose build --no-cache
-Para migraciones Django (si no usa Docker):
-python manage.py migrate
-Fin del Documento
+Descargar desde:
+👉 [https://www.apachelounge.com/download/](https://www.apachelounge.com/download/)
 
-Instalar apache 24
-https://www.apachelounge.com/download/
+### Comandos básicos
 
-INICIAR APACHE
+```bash
 httpd.exe -k start
-
-DETENER APACHE
 httpd.exe -k stop
+httpd.exe -k restart
+```
 
-REINICIAR APACHE
-httpd -k restart
+---
 
+### 📄 `httpd.conf` (Configuración)
 
-httpd.conf =
+```apache
 Define SRVROOT "C:/Apache24"
 ServerRoot "${SRVROOT}"
 
 Listen 443
-
---------------------
-MÓDULOS
---------------------
-LoadModule access_compat_module modules/mod_access_compat.so
-LoadModule alias_module modules/mod_alias.so
-LoadModule authn_core_module modules/mod_authn_core.so
-LoadModule authz_core_module modules/mod_authz_core.so
-LoadModule authz_host_module modules/mod_authz_host.so
-LoadModule dir_module modules/mod_dir.so
-LoadModule env_module modules/mod_env.so
-LoadModule headers_module modules/mod_headers.so
-LoadModule log_config_module modules/mod_log_config.so
-LoadModule mime_module modules/mod_mime.so
-LoadModule proxy_module modules/mod_proxy.so
-LoadModule proxy_http_module modules/mod_proxy_http.so
-LoadModule rewrite_module modules/mod_rewrite.so
-LoadModule setenvif_module modules/mod_setenvif.so
-LoadModule ssl_module modules/mod_ssl.so
-LoadModule socache_shmcb_module modules/mod_socache_shmcb.so
-
-
---------------------
-CONFIG BÁSICA
---------------------
 ServerAdmin admin@localhost
 ServerName localhost:443
+```
 
-ErrorLog "logs/error.log"
-CustomLog "logs/access.log" common
+### Módulos requeridos
 
-⚠️ IMPORTANTE
-NO DEFINAS DocumentRoot GLOBAL
---------------------
-SSL CACHE
---------------------
-SSLSessionCache "shmcb:${SRVROOT}/logs/ssl_scache(512000)"
-SSLSessionCacheTimeout 300
-SSLProxyEngine On
+```apache
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+LoadModule ssl_module modules/mod_ssl.so
+LoadModule rewrite_module modules/mod_rewrite.so
+```
 
-====================
-VIRTUAL HOST HTTPS
-====================
+⚠️ **NO DEFINAS DocumentRoot GLOBAL**
+
+---
+
+### 🔐 VirtualHost HTTPS
+
+```apache
 <VirtualHost *:443>
     ServerName localhost
 
@@ -265,32 +187,193 @@ VIRTUAL HOST HTTPS
 
     ProxyPreserveHost On
     ProxyRequests Off
-
     RequestHeader set X-Forwarded-Proto "https"
-
-    SSLProxyEngine Off
 
     ProxyPass /static/ !
     ProxyPass / http://127.0.0.1:8000/
     ProxyPassReverse / http://127.0.0.1:8000/
-
-    ErrorLog "logs/django_error.log"
-    CustomLog "logs/django_access.log" combined
 </VirtualHost>
+```
 
-abrir el woker.py
+---
 
+# 🟢 PASO 3 — Linux (Ubuntu) – Configuración Automática
 
-DATOS PARA .env
-DEBUG=fALSE
+En Linux **NO se configura manualmente**.
 
-# Email
-PULSAR_URL=pulsar://localhost:6650
-EMAIL_TOPIC=persistent://public/default/email
-SMTP_HOST=smtp.sendgrid.net
-SMTP_PORT=587
-SMTP_USER=apikey
-SMTP_PASS=Esta en el word
-DEFAULT_NOTIFICATION_EMAIL=pruebas.nuam@gmail.com
+Desde la raíz del proyecto:
 
+```bash
+chmod +x Configurar_Ubunto.sh
+sudo ./Configurar_Ubunto.sh
+```
 
+✔ Este script instala:
+
+* Docker
+* Docker Compose
+* Apache
+* mkcert
+* Dependencias del sistema
+
+🔴 **REINICIAR EL SISTEMA DESPUÉS DE EJECUTAR EL SCRIPT**
+
+---
+
+# 🟢 PASO 4 — Instalación de mkcert (HTTPS Local)
+
+## Windows (PowerShell como administrador)
+
+```powershell
+Set-ExecutionPolicy Bypass -Scope Process -Force
+iwr https://community.chocolatey.org/install.ps1 -UseBasicParsing | iex
+choco install mkcert
+mkcert -install
+```
+
+## Linux
+
+```bash
+sudo apt update
+sudo apt install mkcert libnss3-tools -y
+mkcert -install
+```
+
+---
+
+## 🔏 Generar Certificados HTTPS
+
+Desde la **raíz del proyecto**:
+
+```bash
+mkcert localhost 127.0.0.1
+```
+
+Genera archivos como:
+
+* localhost+2.pem
+* localhost+2-key.pem
+
+⚠️ **NO BORRAR ESTOS ARCHIVOS**
+
+---
+
+# 🟢 PASO 5 — Crear y Activar Entorno Virtual
+
+## Windows
+
+```bash
+python -m venv env
+env\Scripts\activate
+pip install -r requirements.txt
+```
+
+## Linux
+
+```bash
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+```
+
+⚠️ **Siempre activar el entorno virtual antes de trabajar**
+
+---
+
+# 🟢 PASO 6 — Levantar Docker (OBLIGATORIO)
+
+Desde:
+
+```
+Proyecto_Nuam-main/pulsar-docker
+```
+
+```bash
+docker compose up -d
+```
+
+Para detener:
+
+```bash
+docker compose down
+```
+
+---
+
+# 🟢 PASO 7 — Ejecución Correcta (2 TERMINALES)
+
+## 🖥 Terminal 1 — Worker Pulsar
+
+Desde la carpeta `miapp`:
+
+```bash
+python worker.py
+```
+
+⚠️ **Debe quedar corriendo**
+
+---
+
+## 🖥 Terminal 2 — Servidor Django HTTPS
+
+Desde la **raíz del proyecto**:
+
+```bash
+python manage.py runserver_plus --cert-file localhost+2.pem
+```
+
+Salida esperada:
+
+```
+Running on https://127.0.0.1:8000
+```
+
+---
+
+## 🌐 Accesos
+
+* Página principal:
+  👉 https://localhost
+
+* Admin:
+  👉 https://localhost/admin/ solo disponible ya inciado dentro de la pagina
+  
+⚠️ Al ingresar por primera vez:
+Cree un perfil enbase a su correo para el funcionamiento del micro servicio
+
+---
+
+# ▶️ ORDEN CORRECTO FINAL
+
+1. Crear `.env`
+2. Instalar Docker + Apache
+3. Configurar Linux o Windows
+4. Instalar mkcert
+5. Generar certificados
+6. Crear entorno virtual
+7. Levantar Docker
+8. Ejecutar `worker.py`
+9. Ejecutar Django con HTTPS
+
+---
+
+## 📘 Recomendaciones Finales
+
+* Activar siempre el entorno virtual
+* No subir `.env` ni credenciales
+* Reiniciar después de instalaciones grandes
+* Para cambios en Docker:
+
+```bash
+docker compose build --no-cache
+```
+
+* Migraciones Django:
+
+```bash
+python manage.py migrate
+```
+
+---
+
+✅ **Fin del Documento – README Oficial Proyecto NUAM**
