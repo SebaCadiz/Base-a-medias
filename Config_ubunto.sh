@@ -1,84 +1,107 @@
 #!/bin/bash
+set -e
 
-# --- VARIABLES (Ajustadas a tus rutas) ---
-R_PATH="/home/frontend1/Escritorio/Base-a-medias-main"
-APP_NAME="NUAM" 
-CERT="$R_PATH/localhost+2.crt"
-KEY="$R_PATH/localhost+2.key"
+# =====================================================
+# CONFIGURACIÓN GENERAL (MODIFICA SOLO ESTO)
+# =====================================================
 
-echo "--- Iniciando Configuración en Modo PROXY (Tipo Windows) ---"
+APP_NAME="NUAM"
+DOMAIN="localhost"
+DJANGO_PORT=8000
 
-# 1. Instalar dependencias necesarias
+# Ruta base del proyecto (por defecto: donde ejecutas el script)
+PROJECT_ROOT="$(pwd)"
+
+# Usuario que ejecuta el script
+RUN_USER="$(whoami)"
+
+# Certificados (mkcert u otros)
+CERT_FILE="$PROJECT_ROOT/localhost+2.crt"
+KEY_FILE="$PROJECT_ROOT/localhost+2.key"
+
+# Archivos estáticos
+STATIC_PATH="$PROJECT_ROOT/staticfiles"
+
+APACHE_SITE_CONF="/etc/apache2/sites-available/${APP_NAME,,}_ssl.conf"
+
+# =====================================================
+echo "🔧 Configurando Apache HTTPS Proxy para $APP_NAME"
+echo "📁 Proyecto: $PROJECT_ROOT"
+echo "👤 Usuario: $RUN_USER"
+echo "🌐 Dominio: https://$DOMAIN"
+echo "================================================="
+
+# =====================================================
+# 1. Dependencias
+# =====================================================
 sudo apt update
-sudo apt install -y apache2-dev python3-dev
-sudo apt update && sudo apt install -y apache2
+sudo apt install -y apache2 apache2-dev python3-dev
 
-# 2. Activar módulos de Apache para Proxy y SSL
-# Necesitamos proxy_http para redirigir el tráfico y ssl para el certificado
+# =====================================================
+# 2. Módulos Apache necesarios
+# =====================================================
 sudo a2enmod ssl proxy proxy_http rewrite headers
 
-# 3. Crear el VirtualHost en modo Proxy
-# Esta configuración permite que Apache reciba HTTPS y hable con Django
-sudo bash -c "cat << EOF > /etc/apache2/sites-available/django_ssl.conf
+# =====================================================
+# 3. Crear VirtualHost HTTPS con Proxy
+# =====================================================
+sudo bash -c "cat << EOF > $APACHE_SITE_CONF
 <VirtualHost *:443>
-    ServerName localhost
+    ServerName $DOMAIN
 
     SSLEngine on
-    SSLCertificateFile $CERT
-    SSLCertificateKeyFile $KEY
+    SSLCertificateFile $CERT_FILE
+    SSLCertificateKeyFile $KEY_FILE
 
-    # Soporte para que Apache pueda hablar con un Django que también tiene SSL
     SSLProxyEngine On
-    SSLProxyVerify none 
+    SSLProxyVerify none
     SSLProxyCheckPeerCN off
     SSLProxyCheckPeerName off
     SSLProxyCheckPeerExpire off
 
-    # Configuración de Proxy idéntica a tu Windows
     ProxyPreserveHost On
     ProxyRequests Off
     RequestHeader set X-Forwarded-Proto \"https\"
 
-    # Servir archivos estáticos directamente desde Apache para mayor velocidad
-    Alias /static $R_PATH/staticfiles
-    <Directory $R_PATH/staticfiles>
+    Alias /static $STATIC_PATH
+    <Directory $STATIC_PATH>
         Require all granted
     </Directory>
 
-    # No pasar los estáticos al proxy, que los maneje Apache
     ProxyPass /static/ !
+    ProxyPass / https://127.0.0.1:$DJANGO_PORT/
+    ProxyPassReverse / https://127.0.0.1:$DJANGO_PORT/
 
-    # Enviar todo lo demás al servidor de desarrollo (Terminal)
-    # Si usas runserver normal, cambia https por http abajo
-    ProxyPass / https://127.0.0.1:8000/
-    ProxyPassReverse / https://127.0.0.1:8000/
-
-    ErrorLog \${APACHE_LOG_DIR}/django_error.log
-    CustomLog \${APACHE_LOG_DIR}/django_access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/${APP_NAME,,}_error.log
+    CustomLog \${APACHE_LOG_DIR}/${APP_NAME,,}_access.log combined
 </VirtualHost>
 EOF"
 
-# 4. Activar sitio y desactivar el default para evitar conflictos
-sudo a2ensite django_ssl.conf
+# =====================================================
+# 4. Activar sitio y limpiar defaults
+# =====================================================
+sudo a2ensite "${APP_NAME,,}_ssl.conf"
 sudo a2dissite 000-default.conf
 
-# 5. Permisos de paso para Apache (necesario para acceder a /static)
-chmod +x /home/frontend1
-chmod +x /home/frontend1/Escritorio
+# =====================================================
+# 5. Permisos mínimos para Apache
+# =====================================================
+PROJECT_PARENT="$(dirname "$PROJECT_ROOT")"
+chmod +x "$PROJECT_PARENT"
+chmod +x "$PROJECT_ROOT"
 
-# 6. Reiniciar Apache
-echo "--- Verificando configuración y reiniciando Apache ---"
-sudo apache2ctl configtest && sudo systemctl restart apache2
+# =====================================================
+# 6. Reinicio seguro
+# =====================================================
+echo "🔄 Verificando configuración Apache..."
+sudo apache2ctl configtest
+sudo systemctl restart apache2
 
-sudo chown frontend1:frontend1 /home/frontend1/Escritorio/Base-a-medias-main/db.sqlite3
-sudo chmod 664 /home/frontend1/Escritorio/Base-a-medias-main/db.sqlite3
-
-
-echo "--------------------------------------------------------"
-echo "PROCESO FINALIZADO"
-echo "--------------------------------------------------------"
-echo "Entra en el navegador a: https://localhost"
-echo "--------------------------------------------------------"
+echo "================================================="
+echo "✅ PROCESO FINALIZADO"
+echo "🌐 Accede en: https://$DOMAIN"
+echo "🚀 Asegúrate de que Django esté corriendo en https://127.0.0.1:$DJANGO_PORT"
+echo "================================================="
 
 
 
