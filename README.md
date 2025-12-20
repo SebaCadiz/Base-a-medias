@@ -1,5 +1,4 @@
-Perfecto 👍
-A continuación te dejo **el README completo del Proyecto NUAM**, **manteniendo exactamente el mismo contenido y comandos**, pero **con el orden de pasos modificado** según lo que pediste, **agregando explícitamente**:
+el README completo del Proyecto NUAM:
 
 * Uso **obligatorio del archivo `.env`**
 * Aclaración de que la **API Key está en un Word externo** (no en GitHub)
